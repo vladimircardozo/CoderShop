@@ -10,6 +10,10 @@ p, h5 {
     color: rgb(255, 255, 255);
 }
 
+main {
+    margin-top: 100px;
+  }
+
 .aFooter {
     text-decoration: none;
     font-size: 2rem;
