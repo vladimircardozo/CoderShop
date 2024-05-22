@@ -1,4 +1,3 @@
-//* simulador interactivo
 const productos = {
     "1": { nombre: "Apple iPhone 13 Pro Max new green finishes", precio: 480 },
     "2": { nombre: "Apple iPhone 14 Pro Max Price in Bangladesh", precio: 599 },
