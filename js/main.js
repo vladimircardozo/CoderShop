@@ -24,8 +24,16 @@ const construirMenu = () => {
     return menu;
 };
 
+const guardarSeleccion = (productosSeleccionados) => {
+    window.localStorage.setItem(`productosSeleccionados`, JSON.stringify(productosSeleccionados));
+};
+
+const cargarSeleccion = () => {
+    return JSON.parse(window.localStorage.getItem(`productosSeleccionados`));
+};
+
 const Interaccion = () => {
-    const productosSeleccionados = [];
+    const productosSeleccionados = cargarSeleccion ();
     const menu = construirMenu();
 
     do {
@@ -55,4 +63,12 @@ const Interaccion = () => {
     alert(resumen);
 };
 
-Interaccion();
+const main = () => {
+    const db = {
+        products: JSON.parse(window.localStorage.getItem("productos")) || productos,
+        cart: JSON.parse(window.localStorage.getItem("productosSeleccionados")) || []
+    }
+    Interaccion();
+};
+
+main();
