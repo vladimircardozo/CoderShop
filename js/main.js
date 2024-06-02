@@ -8,56 +8,102 @@ document.addEventListener("DOMContentLoaded", () => {
         "6": { nombre: "(CUSTOM) MacBook Air M1 8-C CPU, 8-C GPU", precio: 1700, img: "./img/macbook3.png" }
     };
 
-    const productContainer = document.getElementById("productos-container");
+    const contenedorProductos = document.getElementById("productos-container");
 
-    const renderProducts = () => {
-        productContainer.innerHTML = "";
+    const renderizarProductos = () => {
+        contenedorProductos.innerHTML = "";
 
         for (const id in productos) {
-            const product = productos[id];
-            const productCard = `
+            const producto = productos[id];
+            const tarjetaProducto = `
                 <div class="col mb-4">
                     <div class="card custom-card">
-                        <img src="${product.img}" alt="${product.nombre}" class="card-img-top mb-3">
+                        <img src="${producto.img}" alt="${producto.nombre}" class="card-img-top mb-3">
                         <div class="card-body">
-                            <h5 class="card-title mb-0">${product.nombre}</h5>
+                            <h5 class="card-title mb-0">${producto.nombre}</h5>
                         </div>
                         <div class="card-body d-flex justify-content-around">
-                            <p class="fs-3 fw-bold mb-0">$${product.precio}</p>
+                            <p class="fs-3 fw-bold mb-0">$${producto.precio}</p>
                             <button class="btn btn-outline-light" data-id="${id}">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
             `;
-            productContainer.insertAdjacentHTML("beforeend", productCard);
+            contenedorProductos.insertAdjacentHTML("beforeend", tarjetaProducto);
         }
 
-        document.querySelectorAll(".btn-outline-light").forEach(button => {
-            button.addEventListener("click", addToCart);
+        document.querySelectorAll(".btn-outline-light").forEach(boton => {
+            boton.addEventListener("click", agregarAlCarrito);
         });
     };
 
-    const addToCart = (event) => {
-        const productId = event.target.getAttribute("data-id");
-        let cart = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
-        const existingProduct = cart.find(item => item.id === productId);
+    const agregarAlCarrito = (event) => {
+        const productoId = event.target.getAttribute("data-id");
+        let carrito = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+        const productoExistente = carrito.find(item => item.id === productoId);
 
-        if (existingProduct) {
-            existingProduct.cantidad += 1;
+        if (productoExistente) {
+            productoExistente.cantidad += 1;
         } else {
-            cart.push({ id: productId, cantidad: 1 });
+            carrito = [...carrito, { id: productoId, cantidad: 1 }];
         }
 
-        localStorage.setItem("productosSeleccionados", JSON.stringify(cart));
+        localStorage.setItem("productosSeleccionados", JSON.stringify(carrito));
+        actualizarVisualizacionCarrito();
     };
 
-    renderProducts();
+    const eliminarDelCarrito = (productoId) => {
+        let carrito = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+        carrito = carrito.filter(item => item.id !== productoId);
+        localStorage.setItem("productosSeleccionados", JSON.stringify(carrito));
+        actualizarVisualizacionCarrito();
+    };
 
-    const carritoIcono = document.getElementById("carritoIcono");
+    const actualizarVisualizacionCarrito = () => {
+        const carrito = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+        const contenedorProductosCompra = document.getElementById("productosCompra");
+        const totalElemento = document.getElementById("total");
+
+        contenedorProductosCompra.innerHTML = "";
+        let total = 0;
+
+        carrito.forEach(item => {
+            const producto = productos[item.id];
+            total += producto.precio * item.cantidad;
+
+            const itemCarrito = `
+                <div>
+                    <div class="img">
+                        <img src="${producto.img}" alt="${producto.nombre}">
+                        <span>${producto.nombre}</span>
+                    </div>
+                    <div>
+                        <span>${item.cantidad} x $${producto.precio}</span>
+                        <button class="btn-remover" data-id="${item.id}">x</button>
+                    </div>
+                </div>
+            `;
+            contenedorProductosCompra.insertAdjacentHTML("beforeend", itemCarrito);
+        });
+
+        totalElemento.innerHTML = `Total: $${total}`;
+
+        document.querySelectorAll(".btn-remover").forEach(boton => {
+            boton.addEventListener("click", (e) => {
+                const productoId = e.target.getAttribute("data-id");
+                eliminarDelCarrito(productoId);
+            });
+        });
+    };
+
+    renderizarProductos();
+    actualizarVisualizacionCarrito();
+
+    const iconoCarrito = document.getElementById("carritoIcono");
     const contenedorCompra = document.getElementById("contenedorCompra");
     const botonCerrar = document.getElementById("x");
-    
-    carritoIcono.addEventListener("click", (e) => {
+
+    iconoCarrito.addEventListener("click", (e) => {
         e.preventDefault();
         contenedorCompra.style.display = "flex";
     });
