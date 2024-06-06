@@ -51,13 +51,16 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("productosSeleccionados", JSON.stringify(carrito));
         actualizarVisualizacionCarrito();
 
+        setTimeout(() => {
         Toastify({
             text: "Producto agregado al carrito",
             className: "info",
             style: {
                 background: "rgb(47, 47, 70)",
-            }
+            },
+            duration: 2000
         }).showToast();
+        }, 500);
     };
 
     const eliminarDelCarrito = (productoId) => {
