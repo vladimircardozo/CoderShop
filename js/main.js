@@ -49,18 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         localStorage.setItem("productosSeleccionados", JSON.stringify(carrito));
-        actualizarVisualizacionCarrito();
-
-        setTimeout(() => {
-        Toastify({
-            text: "Producto agregado al carrito",
-            className: "info",
-            style: {
-                background: "rgb(47, 47, 70)",
-            },
-            duration: 2000
-        }).showToast();
-        }, 500);
+        
+        actualizarVisualizacionCarrito().then(() => {
+            Toastify({
+                text: "Producto agregado al carrito",
+                className: "info",
+                style: {
+                    background: "rgb(47, 47, 70)",
+                },
+                duration: 3000
+            }).showToast();
+        });
     };
 
     const eliminarDelCarrito = (productoId) => {
@@ -71,39 +70,43 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const actualizarVisualizacionCarrito = () => {
-        const carrito = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
-        const contenedorProductosCompra = document.getElementById("productosCompra");
-        const totalElemento = document.getElementById("total");
+        return new Promise((resolve) => {
+            const carrito = JSON.parse(localStorage.getItem("productosSeleccionados")) || [];
+            const contenedorProductosCompra = document.getElementById("productosCompra");
+            const totalElemento = document.getElementById("total");
 
-        contenedorProductosCompra.innerHTML = "";
-        let total = 0;
+            contenedorProductosCompra.innerHTML = "";
+            let total = 0;
 
-        carrito.forEach(item => {
-            const producto = productos[item.id];
-            total += producto.precio * item.cantidad;
+            carrito.forEach(item => {
+                const producto = productos[item.id];
+                total += producto.precio * item.cantidad;
 
-            const itemCarrito = `
-                <div>
-                    <div class="img">
-                        <img src="${producto.img}" alt="${producto.nombre}">
-                        <span>${producto.nombre}</span>
-                    </div>
+                const itemCarrito = `
                     <div>
-                        <span>${item.cantidad} x $${producto.precio}</span>
-                        <button class="btn-remover" data-id="${item.id}">x</button>
+                        <div class="img">
+                            <img src="${producto.img}" alt="${producto.nombre}">
+                            <span>${producto.nombre}</span>
+                        </div>
+                        <div>
+                            <span>${item.cantidad} x $${producto.precio}</span>
+                            <button class="btn-remover" data-id="${item.id}">x</button>
+                        </div>
                     </div>
-                </div>
-            `;
-            contenedorProductosCompra.insertAdjacentHTML("beforeend", itemCarrito);
-        });
-
-        totalElemento.innerHTML = `Total: $${total}`;
-
-        document.querySelectorAll(".btn-remover").forEach(boton => {
-            boton.addEventListener("click", (e) => {
-                const productoId = e.target.getAttribute("data-id");
-                eliminarDelCarrito(productoId);
+                `;
+                contenedorProductosCompra.insertAdjacentHTML("beforeend", itemCarrito);
             });
+
+            totalElemento.innerHTML = `Total: $${total}`;
+
+            document.querySelectorAll(".btn-remover").forEach(boton => {
+                boton.addEventListener("click", (e) => {
+                    const productoId = e.target.getAttribute("data-id");
+                    eliminarDelCarrito(productoId);
+                });
+            });
+
+            resolve();
         });
     };
 
