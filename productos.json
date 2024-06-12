@@ -1,0 +1,39 @@
+[
+    {
+      "id_producto": 1,
+      "nombre": "Apple iPhone 13 Pro Max new green finishes",
+      "precio": 480,
+      "imagen": "./img/iPhone13.png"
+    },
+    {
+      "id_producto": 2,
+      "nombre": "Apple iPhone 14 Pro Max Price in Bangladesh",
+      "precio": 600,
+      "imagen": "./img/iphone14.png"
+    },
+    {
+      "id_producto": 3,
+      "nombre": "Apple IPhone 15 Pro Max Natural Titanium",
+      "precio": 700,
+      "imagen": "./img/iphone15.png"
+    },
+    {
+      "id_producto": 4,
+      "nombre": "MacBook Pro 14″ M1 Max 10-C CPU 24-C GPU",
+      "precio": 1230,
+      "imagen": "./img/macbook1.png"
+    },
+    {
+      "id_producto": 5,
+      "nombre": "MacBook Pro 16″ M1 Max 10-C CPU, 32-C GPU, 32GB Unified, 1TB",
+      "precio": 1500,
+      "imagen": "./img/macbook2.png"
+    },
+    {
+      "id_producto": 6,
+      "nombre": "(CUSTOM) MacBook Air M1 8-C CPU, 8-C GPU",
+      "precio": 1700,
+      "imagen": "./img/macbook3.png"
+    }
+  ]
+  
